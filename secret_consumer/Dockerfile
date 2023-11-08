@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM openjdk:11
 # Set the working directory
 WORKDIR /app
 # Copy the pom.xml file and download the project dependencies
