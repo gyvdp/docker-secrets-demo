@@ -2,20 +2,14 @@ package org.example;
 import jakarta.annotation.PostConstruct;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Produces;
-import jakarta.inject.Inject;
+
 
 import com.bettercloud.vault.Vault;
 import com.bettercloud.vault.VaultConfig;
 import com.bettercloud.vault.VaultException;
-import jakarta.inject.Named;
 
-@Named("myBean")
 @ApplicationScoped
 public class VaultAnnotation {
-    public VaultAnnotation() {
-    }
-    @Inject
     private Vault vault;
 
     @PostConstruct
@@ -26,7 +20,7 @@ public class VaultAnnotation {
             VaultConfig config = new VaultConfig()
                     .address(vaultAddress)
                     .token(vaultToken)
-                    .build();
+                    .build().engineVersion(1);
             this.vault = new Vault(config);
         } catch (VaultException e) {
             System.out.println("Vault initialization failed: " + e.getMessage());
@@ -36,14 +30,10 @@ public class VaultAnnotation {
     public String readSecret(String path) {
         String response = null;
         try {
-            response = vault.logical().read(path).toString();
+            response = vault.logical().read(path).getData().toString();
         } catch (VaultException e){
             System.out.println("not working");
         }
         return response;
-    }
-
-    public String hello(){
-        return "zohn";
     }
 }
